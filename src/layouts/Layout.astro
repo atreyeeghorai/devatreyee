@@ -1,0 +1,73 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Developer Portfolio" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ClientRouter />
+    <script is:inline>
+      const setDarkMode = () => {
+        const theme = (() => {
+          if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
+          }
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+          }
+          return 'light';
+        })();
+      
+        if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+        window.localStorage.setItem('theme', theme);
+      };
+      
+      setDarkMode();
+      document.addEventListener('astro:after-swap', setDarkMode);
+    </script>
+  </head>
+  <body class="min-h-screen w-full bg-background font-sans antialiased">
+    <div class="relative flex min-h-screen flex-col">
+      <Header client:load />
+      <main class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <script>
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+      
+      gsap.registerPlugin(ScrollTrigger);
+      
+      // Clear ScrollTriggers before page swap to prevent leaks with ViewTransitions
+      document.addEventListener('astro:before-swap', () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      });
+      
+      // Refresh ScrollTrigger to recalculate dimensions on navigation
+      document.addEventListener('astro:page-load', () => {
+        ScrollTrigger.refresh();
+      });
+    </script>
+  </body>
+</html>
