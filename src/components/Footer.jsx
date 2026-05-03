@@ -1,4 +1,4 @@
-import { FaXTwitter,FaGithub,FaLinkedin } from 'react-icons/fa6';
+import { FaGithub,FaLinkedin } from 'react-icons/fa6';
 
 const Footer = () => {
   return (
@@ -37,7 +37,7 @@ const Footer = () => {
           >
             <FaGithub className="h-5 w-5" />
           </a>
-          <a
+          {/* <a
             href="https://x.com/atreyeeghorai"
             target="_blank"
             rel="noopener noreferrer"
@@ -45,7 +45,7 @@ const Footer = () => {
             aria-label="Twitter"
           >
             <FaXTwitter className="h-5 w-5" />
-          </a>
+          </a> */}
           <a
             href="https://www.linkedin.com/in/atreyee-ghorai"
             target="_blank"
